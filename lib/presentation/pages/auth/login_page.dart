@@ -1,7 +1,11 @@
+import 'package:d_info/d_info.dart';
 import 'package:d_view/d_view.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:money_record/config/app_asset.dart';
 import 'package:money_record/config/app_color.dart';
+import 'package:money_record/data/source/source_user.dart';
+import 'package:money_record/presentation/pages/home_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,8 +19,20 @@ class _LoginPageState extends State<LoginPage> {
   final passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
-  login() {
-    if (formKey.currentState!.validate()) {}
+  login() async {
+    if (formKey.currentState!.validate()) {
+      bool success =
+          await SourceUser.login(emailController.text, passwordController.text);
+      if (success) {
+        DInfo.dialogSuccess(context, 'Berhasil Login');
+        DInfo.closeDialog(context, actionAfterClose: () {
+          Get.off(() => const HomePage());
+        });
+      } else {
+        DInfo.dialogSuccess(context, 'Gagal Login');
+        DInfo.closeDialog(context);
+      }
+    }
   }
 
   @override
@@ -42,9 +58,7 @@ class _LoginPageState extends State<LoginPage> {
                         validator: (value) =>
                             value == "" ? "Email harus diisi" : null,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
-                        style: TextStyle(
-                            color: AppColor.primary
-                        ),
+                        style: TextStyle(color: AppColor.primary),
                         decoration: InputDecoration(
                             fillColor: Colors.white,
                             filled: true,
@@ -67,9 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                             value == "" ? "Password harus diisi" : null,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         obscureText: true,
-                        style: TextStyle(
-                          color: AppColor.primary
-                        ),
+                        style: TextStyle(color: AppColor.primary),
                         decoration: InputDecoration(
                             fillColor: Colors.white,
                             filled: true,
