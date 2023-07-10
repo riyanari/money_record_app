@@ -25,13 +25,13 @@ class _LoginPageState extends State<LoginPage> {
       bool success =
           await SourceUser.login(emailController.text, passwordController.text);
       if (success) {
-        DInfo.dialogSuccess(context, 'Berhasil Login');
-        DInfo.closeDialog(context, actionAfterClose: () {
+        DInfo.dialogSuccess('Berhasil Login');
+        DInfo.closeDialog(actionAfterClose: () {
           Get.off(() => const HomePage());
         });
       } else {
-        DInfo.dialogSuccess(context, 'Gagal Login');
-        DInfo.closeDialog(context);
+        DInfo.dialogSuccess('Gagal Login');
+        DInfo.closeDialog();
       }
     }
   }
@@ -59,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
                         validator: (value) =>
                             value == "" ? "Email harus diisi" : null,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
-                        style: TextStyle(color: AppColor.primary),
+                        style: const TextStyle(color: AppColor.primary),
                         decoration: InputDecoration(
                             fillColor: Colors.white,
                             filled: true,
@@ -82,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                             value == "" ? "Password harus diisi" : null,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         obscureText: true,
-                        style: TextStyle(color: AppColor.primary),
+                        style: const TextStyle(color: AppColor.primary),
                         decoration: InputDecoration(
                             fillColor: Colors.white,
                             filled: true,

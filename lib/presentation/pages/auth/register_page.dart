@@ -1,4 +1,3 @@
-import 'package:d_info/d_info.dart';
 import 'package:d_view/d_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,7 +6,6 @@ import 'package:money_record/presentation/pages/auth/login_page.dart';
 import '../../../config/app_asset.dart';
 import '../../../config/app_color.dart';
 import '../../../data/source/source_user.dart';
-import '../home_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -24,17 +22,17 @@ class _RegisterPageState extends State<RegisterPage> {
 
   register() async {
     if (formKey.currentState!.validate()) {
-      bool success =
-      await SourceUser.login(emailController.text, passwordController.text);
-      if (success) {
-        DInfo.dialogSuccess(context, 'Berhasil Login');
-        DInfo.closeDialog(context, actionAfterClose: () {
-          Get.off(() => const HomePage());
-        });
-      } else {
-        DInfo.dialogSuccess(context, 'Gagal Login');
-        DInfo.closeDialog(context);
-      }
+      // bool success =
+      await SourceUser.register(nameController.text, emailController.text, passwordController.text);
+      // if (success) {
+      //   DInfo.dialogSuccess('Berhasil Login');
+      //   DInfo.closeDialog(actionAfterClose: () {
+      //     Get.off(() => const HomePage());
+      //   });
+      // } else {
+      //   DInfo.dialogSuccess('Gagal Login');
+      //   DInfo.closeDialog();
+      // }
     }
   }
 
@@ -61,7 +59,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         validator: (value) =>
                         value == "" ? "Nama harus diisi" : null,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
-                        style: TextStyle(color: AppColor.primary),
+                        style: const TextStyle(color: AppColor.primary),
                         decoration: InputDecoration(
                             fillColor: Colors.white,
                             filled: true,
@@ -83,7 +81,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         validator: (value) =>
                         value == "" ? "Email harus diisi" : null,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
-                        style: TextStyle(color: AppColor.primary),
+                        style: const TextStyle(color: AppColor.primary),
                         decoration: InputDecoration(
                             fillColor: Colors.white,
                             filled: true,
