@@ -30,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
           Get.off(() => const HomePage());
         });
       } else {
-        DInfo.dialogSuccess('Gagal Login');
+        DInfo.dialogError('Gagal Login');
         DInfo.closeDialog();
       }
     }
