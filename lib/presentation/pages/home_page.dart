@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_record/config/app_asset.dart';
 import 'package:money_record/config/app_color.dart';
+import 'package:money_record/config/session.dart';
 import 'package:money_record/presentation/controller/c_user.dart';
+import 'package:money_record/presentation/pages/auth/login_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,7 +21,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      endDrawer: const Drawer(),
+      endDrawer: drawer(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -263,6 +265,105 @@ class _HomePageState extends State<HomePage> {
           ],
         )
       ],
+    );
+  }
+
+  Drawer drawer() {
+    return Drawer(
+      child: ListView(
+        children: [
+          DrawerHeader(
+            margin: const EdgeInsets.only(bottom: 0),
+            padding: const EdgeInsets.fromLTRB(20, 16, 16, 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Image.asset(AppAsset.profile),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Obx(() {
+                            return Text(
+                              cUser.data.name ?? 'Someone',
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 20),
+                            );
+                          }),
+                          Obx(() {
+                            return Text(
+                              cUser.data.email ?? 'someone@gmail.com',
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w300, fontSize: 16),
+                            );
+                          }),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                Material(
+                  color: AppColor.primary,
+                  borderRadius: BorderRadius.circular(30),
+                  child: InkWell(
+                    onTap: () {
+                      Session.clearUser();
+                      Get.off(() => const LoginPage());
+                    },
+                    borderRadius: BorderRadius.circular(30),
+                    child: const Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                      child: Text(
+                        'Logout',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          ListTile(
+            onTap: (){},
+            leading: const Icon(Icons.add),
+            horizontalTitleGap: 0,
+            title: const Text('Tambah Baru'),
+            trailing: const Icon(Icons.navigate_next),
+          ),
+          const Divider(height: 1,),
+          ListTile(
+            onTap: (){},
+            leading: const Icon(Icons.south_west),
+            horizontalTitleGap: 0,
+            title: const Text('Pemasukan'),
+            trailing: const Icon(Icons.navigate_next),
+          ),
+          const Divider(height: 1,),
+          ListTile(
+            onTap: (){},
+            leading: const Icon(Icons.north_east),
+            horizontalTitleGap: 0,
+            title: const Text('Pengeluaran'),
+            trailing: const Icon(Icons.navigate_next),
+          ),
+          const Divider(height: 1,),
+          ListTile(
+            onTap: (){},
+            leading: const Icon(Icons.history),
+            horizontalTitleGap: 0,
+            title: const Text('Riwayat'),
+            trailing: const Icon(Icons.navigate_next),
+          ),
+          const Divider(height: 1,),
+        ],
+      ),
     );
   }
 }
