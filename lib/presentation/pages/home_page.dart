@@ -167,7 +167,7 @@ class _HomePageState extends State<HomePage> {
     return AspectRatio(
       aspectRatio: 16 / 9,
       child: DChartBar(
-        data: [
+        data: const [
           {
             'id': 'Bar',
             'data': [
@@ -202,7 +202,7 @@ class _HomePageState extends State<HomePage> {
           child: Stack(
             children: [
               DChartPie(
-                data: [
+                data: const [
                   {'domain': 'Flutter', 'measure': 60},
                   {'domain': 'React Native', 'measure': 40},
                 ],
@@ -232,7 +232,7 @@ class _HomePageState extends State<HomePage> {
                   color: AppColor.primary,
                 ),
                 DView.spaceWidth(8),
-                Text("Pemasukan"),
+                const Text("Pemasukan"),
               ],
             ),
             DView.spaceHeight(8),
@@ -244,22 +244,21 @@ class _HomePageState extends State<HomePage> {
                   color: AppColor.secondary,
                 ),
                 DView.spaceWidth(8),
-                Text("Pengeluaran"),
+                const Text("Pengeluaran"),
               ],
             ),
             DView.spaceHeight(20),
-            Text("Pemasukan"),
-            Text("lebih besar 20%"),
-            Text("dari pengeluaran"),
+            const Text("Pemasukan"),
+            const Text("lebih besar 20%"),
+            const Text("dari pengeluaran"),
             DView.spaceHeight(10),
-            Text("Atau Setara:"),
-            Text(
+            const Text("Atau Setara:"),
+            const Text(
               "Rp. 20.000,00",
               style: TextStyle(
-                color: AppColor.primary,
-                fontSize: 18,
-                fontWeight: FontWeight.bold
-              ),
+                  color: AppColor.primary,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
             ),
           ],
         )
