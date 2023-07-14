@@ -112,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                     .copyWith(fontWeight: FontWeight.bold),
               ),
               DView.spaceHeight(),
-              barWeek(),
+              barWeekly(),
               DView.spaceHeight(30),
               Text(
                 'Pengeluaran Bulan Ini',
@@ -182,32 +182,29 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  AspectRatio barWeek() {
+  AspectRatio barWeekly() {
     return AspectRatio(
       aspectRatio: 16 / 9,
-      child: DChartBar(
-        data: const [
-          {
-            'id': 'Bar',
-            'data': [
-              {'domain': 'Sen', 'measure': 2},
-              {'domain': 'Sel', 'measure': 2},
-              {'domain': 'Rab', 'measure': 2},
-              {'domain': 'Kam', 'measure': 4},
-              {'domain': 'Jum', 'measure': 6},
-              {'domain': 'Sab', 'measure': 0.3},
-              {'domain': 'Min', 'measure': 0.3},
+      child: Obx(() {
+          return DChartBar(
+            data: [
+              {
+                'id': 'Bar',
+                'data': List.generate(7, (index) {
+                  return {'domain': cHome.weekText()[index], 'measure': cHome.weekOutcome[index]};
+                })
+              },
             ],
-          },
-        ],
-        domainLabelPaddingToAxisLine: 16,
-        axisLineTick: 2,
-        axisLinePointTick: 2,
-        axisLinePointWidth: 10,
-        axisLineColor: AppColor.primary,
-        measureLabelPaddingToAxisLine: 16,
-        barColor: (barData, index, id) => AppColor.primary,
-        showBarValue: true,
+            domainLabelPaddingToAxisLine: 8,
+            axisLineTick: 2,
+            // axisLinePointTick: 2,
+            // axisLinePointWidth: 10,
+            axisLineColor: AppColor.primary,
+            measureLabelPaddingToAxisLine: 16,
+            barColor: (barData, index, id) => AppColor.primary,
+            showBarValue: true,
+          );
+        }
       ),
     );
   }
