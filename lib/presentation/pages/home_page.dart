@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_record/config/app_asset.dart';
 import 'package:money_record/config/app_color.dart';
+import 'package:money_record/config/app_format.dart';
 import 'package:money_record/config/session.dart';
+import 'package:money_record/presentation/controller/c_home.dart';
 import 'package:money_record/presentation/controller/c_user.dart';
 import 'package:money_record/presentation/pages/auth/login_page.dart';
 
@@ -17,6 +19,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final cUser = Get.put(CUser());
+  final cHome = Get.put(CHome());
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    cHome.getAnalysis(cUser.data.idUser!);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,6 +102,7 @@ class _HomePageState extends State<HomePage> {
                       borderRadius: BorderRadius.circular(30)),
                 ),
               ),
+
               DView.spaceHeight(30),
               Text(
                 'Pengeluaran Minggu Ini',
@@ -128,17 +139,23 @@ class _HomePageState extends State<HomePage> {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 20, 16, 4),
-            child: Text(
-              'Rp 500.000,00',
-              style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                  fontWeight: FontWeight.bold, color: AppColor.secondary),
+            child: Obx(() {
+                return Text(
+                  AppFormat.currency(cHome.today.toString()),
+                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                      fontWeight: FontWeight.bold, color: AppColor.secondary),
+                );
+              }
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.fromLTRB(16, 0, 16, 30),
-            child: Text(
-              '+20% dibanding kemarin',
-              style: TextStyle(color: AppColor.bg, fontSize: 16),
+           Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 30),
+            child: Obx(() {
+                return Text(
+                  cHome.todayPercent,
+                  style: const TextStyle(color: AppColor.bg, fontSize: 16),
+                );
+              }
             ),
           ),
           Container(
