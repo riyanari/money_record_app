@@ -9,6 +9,7 @@ import 'package:money_record/config/session.dart';
 import 'package:money_record/presentation/controller/c_home.dart';
 import 'package:money_record/presentation/controller/c_user.dart';
 import 'package:money_record/presentation/pages/auth/login_page.dart';
+import 'package:money_record/presentation/pages/history/add_history_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -81,49 +82,51 @@ class _HomePageState extends State<HomePage> {
           ),
           Expanded(
               child: ListView(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 30),
-            children: [
-              Text(
-                'Pengeluaran Hari Ini',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(fontWeight: FontWeight.bold),
-              ),
-              DView.spaceHeight(),
-              cardToday(context),
-              DView.spaceHeight(30),
-              Center(
-                child: Container(
-                  height: 5,
-                  width: 80,
-                  decoration: BoxDecoration(
-                      color: AppColor.primary.withOpacity(0.5),
-                      borderRadius: BorderRadius.circular(30)),
-                ),
-              ),
-
-              DView.spaceHeight(30),
-              Text(
-                'Pengeluaran Minggu Ini',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(fontWeight: FontWeight.bold),
-              ),
-              DView.spaceHeight(),
-              barWeekly(),
-              DView.spaceHeight(30),
-              Text(
-                'Pengeluaran Bulan Ini',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(fontWeight: FontWeight.bold),
-              ),
-              chartMont()
-            ],
-          )),
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 30),
+                children: [
+                  Text(
+                    'Pengeluaran Hari Ini',
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .titleLarge!
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  DView.spaceHeight(),
+                  cardToday(context),
+                  DView.spaceHeight(30),
+                  Center(
+                    child: Container(
+                      height: 5,
+                      width: 80,
+                      decoration: BoxDecoration(
+                          color: AppColor.primary.withOpacity(0.5),
+                          borderRadius: BorderRadius.circular(30)),
+                    ),
+                  ),
+                  DView.spaceHeight(30),
+                  Text(
+                    'Pengeluaran Minggu Ini',
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .titleLarge!
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  DView.spaceHeight(),
+                  barWeekly(),
+                  DView.spaceHeight(30),
+                  Text(
+                    'Pengeluaran Bulan Ini',
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .titleLarge!
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  chartMont(context)
+                ],
+              )),
         ],
       ),
     );
@@ -140,23 +143,25 @@ class _HomePageState extends State<HomePage> {
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 20, 16, 4),
             child: Obx(() {
-                return Text(
-                  AppFormat.currency(cHome.today.toString()),
-                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                      fontWeight: FontWeight.bold, color: AppColor.secondary),
-                );
-              }
-            ),
+              return Text(
+                AppFormat.currency(cHome.today.toString()),
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .headlineMedium!
+                    .copyWith(
+                    fontWeight: FontWeight.bold, color: AppColor.secondary),
+              );
+            }),
           ),
-           Padding(
+          Padding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 30),
             child: Obx(() {
-                return Text(
-                  cHome.todayPercent,
-                  style: const TextStyle(color: AppColor.bg, fontSize: 16),
-                );
-              }
-            ),
+              return Text(
+                cHome.todayPercent,
+                style: const TextStyle(color: AppColor.bg, fontSize: 16),
+              );
+            }),
           ),
           Container(
             margin: const EdgeInsets.fromLTRB(16, 0, 0, 16),
@@ -186,54 +191,79 @@ class _HomePageState extends State<HomePage> {
     return AspectRatio(
       aspectRatio: 16 / 9,
       child: Obx(() {
-          return DChartBar(
-            data: [
-              {
-                'id': 'Bar',
-                'data': List.generate(7, (index) {
-                  return {'domain': cHome.weekText()[index], 'measure': cHome.weekOutcome[index]};
-                })
-              },
-            ],
-            domainLabelPaddingToAxisLine: 8,
-            axisLineTick: 2,
-            // axisLinePointTick: 2,
-            // axisLinePointWidth: 10,
-            axisLineColor: AppColor.primary,
-            measureLabelPaddingToAxisLine: 16,
-            barColor: (barData, index, id) => AppColor.primary,
-            showBarValue: true,
-          );
-        }
-      ),
+        return DChartBar(
+          data: [
+            {
+              'id': 'Bar',
+              'data': List.generate(7, (index) {
+                return {
+                  'domain': cHome.weekText()[index],
+                  'measure': cHome.week[index]
+                };
+              })
+            },
+          ],
+          domainLabelPaddingToAxisLine: 8,
+          axisLineTick: 2,
+          // axisLinePointTick: 2,
+          // axisLinePointWidth: 10,
+          axisLineColor: AppColor.primary,
+          measureLabelPaddingToAxisLine: 16,
+          barColor: (barData, index, id) => AppColor.primary,
+          showBarValue: true,
+        );
+      }),
     );
   }
 
-  chartMont() {
+  Row chartMont(BuildContext context) {
     return Row(
       children: [
         SizedBox(
-          width: MediaQuery.of(context).size.width * 0.5,
-          height: MediaQuery.of(context).size.width * 0.5,
+          width: MediaQuery
+              .of(context)
+              .size
+              .width * 0.5,
+          height: MediaQuery
+              .of(context)
+              .size
+              .width * 0.5,
           child: Stack(
             children: [
-              DChartPie(
-                data: const [
-                  {'domain': 'Flutter', 'measure': 60},
-                  {'domain': 'React Native', 'measure': 40},
-                ],
-                fillColor: (pieData, index) => AppColor.primary,
-                donutWidth: 30,
-                labelColor: Colors.white,
-              ),
+              Obx(() {
+                return DChartPie(
+                  data: [
+                    {'domain': 'income', 'measure': cHome.monthIncome},
+                    {'domain': 'outcome', 'measure': cHome.monthOutcome},
+                    if (cHome.monthIncome == 0 && cHome.monthOutcome == 0)
+                      {'domain': 'nol', 'measure': 1}
+                  ],
+                  fillColor: (pieData, index) {
+                    switch (pieData['domain']) {
+                      case 'income':
+                        return AppColor.primary;
+                      case 'outcome':
+                        return AppColor.chart;
+                      default:
+                        return Colors.grey.withOpacity(0.2);
+                    }
+                  },
+                  donutWidth: 20,
+                  labelColor: Colors.transparent,
+                  showLabelLine: false,
+                );
+              }),
               Center(
-                  child: Text(
-                "60%",
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineMedium!
-                    .copyWith(color: AppColor.primary),
-              ))
+                  child: Obx(() {
+                return Text(
+                  "${cHome.percentIncome}%",
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .headlineMedium!
+                      .copyWith(color: AppColor.primary),
+                );
+              }))
             ],
           ),
         ),
@@ -264,18 +294,23 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             DView.spaceHeight(20),
-            const Text("Pemasukan"),
-            const Text("lebih besar 20%"),
-            const Text("dari pengeluaran"),
-            DView.spaceHeight(10),
+
+            Obx(() {
+              print("cek: ${cHome.monthPercent}%");
+              return Text('cek: ${cHome.monthPercent}');
+            }),
+
+                DView.spaceHeight(10),
             const Text("Atau Setara:"),
-            const Text(
-              "Rp. 20.000,00",
-              style: TextStyle(
-                  color: AppColor.primary,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold),
-            ),
+            Obx(() {
+              return Text(
+                AppFormat.currency(cHome.differentMonth.toString()),
+                style: const TextStyle(
+                    color: AppColor.primary,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold),
+              );
+            }),
           ],
         )
       ],
@@ -330,7 +365,7 @@ class _HomePageState extends State<HomePage> {
                     borderRadius: BorderRadius.circular(30),
                     child: const Padding(
                       padding:
-                          EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                      EdgeInsets.symmetric(horizontal: 24, vertical: 8),
                       child: Text(
                         'Logout',
                         style: TextStyle(
@@ -345,37 +380,51 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           ListTile(
-            onTap: (){},
+            onTap: () {
+              Get.to(()=>const AddHistoryPage())?.then((value) {
+                if(value??false) {
+                  cHome.getAnalysis(cUser.data.idUser!);
+                }
+              });
+            },
             leading: const Icon(Icons.add),
             horizontalTitleGap: 0,
             title: const Text('Tambah Baru'),
             trailing: const Icon(Icons.navigate_next),
           ),
-          const Divider(height: 1,),
+          const Divider(
+            height: 1,
+          ),
           ListTile(
-            onTap: (){},
+            onTap: () {},
             leading: const Icon(Icons.south_west),
             horizontalTitleGap: 0,
             title: const Text('Pemasukan'),
             trailing: const Icon(Icons.navigate_next),
           ),
-          const Divider(height: 1,),
+          const Divider(
+            height: 1,
+          ),
           ListTile(
-            onTap: (){},
+            onTap: () {},
             leading: const Icon(Icons.north_east),
             horizontalTitleGap: 0,
             title: const Text('Pengeluaran'),
             trailing: const Icon(Icons.navigate_next),
           ),
-          const Divider(height: 1,),
+          const Divider(
+            height: 1,
+          ),
           ListTile(
-            onTap: (){},
+            onTap: () {},
             leading: const Icon(Icons.history),
             horizontalTitleGap: 0,
             title: const Text('Riwayat'),
             trailing: const Icon(Icons.navigate_next),
           ),
-          const Divider(height: 1,),
+          const Divider(
+            height: 1,
+          ),
         ],
       ),
     );
