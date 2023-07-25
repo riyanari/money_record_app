@@ -296,8 +296,7 @@ class _HomePageState extends State<HomePage> {
             DView.spaceHeight(20),
 
             Obx(() {
-              print("cek: ${cHome.monthPercent}%");
-              return Text('cek: ${cHome.monthPercent}');
+              return Text(cHome.monthPercent);
             }),
 
                 DView.spaceHeight(10),
