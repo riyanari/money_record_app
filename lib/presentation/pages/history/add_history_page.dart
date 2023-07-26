@@ -1,6 +1,10 @@
 import 'package:d_input/d_input.dart';
 import 'package:d_view/d_view.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:money_record/config/app_format.dart';
+import 'package:money_record/presentation/controller/history/c_add_history.dart';
 
 import '../../../config/app_color.dart';
 
@@ -9,6 +13,9 @@ class AddHistoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cAddHistory = Get.put(CAddHistory());
+    final objectController = TextEditingController();
+    final priceController = TextEditingController();
     return Scaffold(
       appBar: DView.appBarLeft("Tambah Baru"),
       body: ListView(
@@ -20,10 +27,22 @@ class AddHistoryPage extends StatelessWidget {
           ),
           Row(
             children: [
-              const Text("2022-01-01"),
+              Obx(() {
+                return Text(cAddHistory.date);
+              }),
               DView.spaceWidth(),
               ElevatedButton.icon(
-                  onPressed: () {},
+                  onPressed: () async {
+                    DateTime? result = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2022, 01, 01),
+                        lastDate: DateTime(DateTime.now().year + 1));
+                    if (result != null) {
+                      cAddHistory
+                          .setDate(DateFormat('yyyy-MM-dd').format(result));
+                    }
+                  },
                   icon: const Icon(Icons.event),
                   label: const Text("Pilih"))
             ],
@@ -34,31 +53,45 @@ class AddHistoryPage extends StatelessWidget {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           DView.spaceHeight(8),
-          DropdownButtonFormField(
-            value: 'Pemasukan',
-            items: ['Pemasukan', 'Pengeluaran'].map((e) {
-              return DropdownMenuItem(
-                value: e,
-                child: Text(e),
-              );
-            }).toList(),
-            onChanged: (value) {},
-            decoration: const InputDecoration(
-                border: OutlineInputBorder(), isDense: true),
-          ),
+          Obx(() {
+            return DropdownButtonFormField(
+              value: cAddHistory.type,
+              items: ['Pemasukan', 'Pengeluaran'].map((e) {
+                return DropdownMenuItem(
+                  value: e,
+                  child: Text(e),
+                );
+              }).toList(),
+              onChanged: (value) {
+                cAddHistory.setType(value);
+              },
+              decoration: const InputDecoration(
+                  border: OutlineInputBorder(), isDense: true),
+            );
+          }),
           DView.spaceHeight(),
           DInput(
-            controller: TextEditingController(),
+            controller: objectController,
             hint: 'Gaji',
             title: "Sumber/objek pengeluaran",
           ),
           DView.spaceHeight(),
           DInput(
-            controller: TextEditingController(),
+            controller: priceController,
             hint: '5000000',
             title: "Jumlah Rp. ",
             inputType: TextInputType.number,
           ),
+          DView.spaceHeight(),
+          ElevatedButton(
+              onPressed: () {
+                cAddHistory.addItem({
+                  "object": objectController.text,
+                  "price": priceController.text
+                });
+                objectController.clear();
+                priceController.clear();
+              }, child: const Text('Tambah ke items')),
           DView.spaceHeight(),
           Center(
             child: Container(
@@ -80,29 +113,20 @@ class AddHistoryPage extends StatelessWidget {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: Colors.grey)),
-            child: Wrap(
-              children: [
-                Chip(
-                  label: const Text('Sumber'),
-                  deleteIcon: const Icon(Icons.clear),
-                  onDeleted: () {},
-                ),
-                Chip(
-                  label: const Text('Sumber'),
-                  deleteIcon: const Icon(Icons.clear),
-                  onDeleted: () {},
-                ),
-                Chip(
-                  label: const Text('Sumber'),
-                  deleteIcon: const Icon(Icons.clear),
-                  onDeleted: () {},
-                ),
-                Chip(
-                  label: const Text('Sumber'),
-                  deleteIcon: const Icon(Icons.clear),
-                  onDeleted: () {},
-                ),
-              ],
+            child: GetBuilder<CAddHistory>(
+              builder: (_) {
+                return Wrap(
+                  // runSpacing: 8,
+                  spacing: 8,
+                  children: List.generate(_.items.length, (index) {
+                    return Chip(
+                      label: Text(_.items[index]['object']),
+                      deleteIcon: const Icon(Icons.clear),
+                      onDeleted: () => _.deleteItem(index),
+                    );
+                  })
+                );
+              }
             ),
           ),
           DView.spaceHeight(),
@@ -113,14 +137,17 @@ class AddHistoryPage extends StatelessWidget {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               DView.spaceWidth(),
-              Text(
-                "Rp 5.000.000,00",
-                style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                    fontWeight: FontWeight.bold, color: AppColor.primary),
+              Obx(() {
+                  return Text(
+                    AppFormat.currency(cAddHistory.total.toString()),
+                    style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                        fontWeight: FontWeight.bold, color: AppColor.primary),
+                  );
+                }
               )
             ],
           ),
-          DView.spaceHeight(50),
+          DView.spaceHeight(30),
           Material(
             color: AppColor.primary,
             borderRadius: BorderRadius.circular(8),
@@ -128,7 +155,7 @@ class AddHistoryPage extends StatelessWidget {
               onTap: () {},
               child: Padding(
                 padding: const EdgeInsets.symmetric(
-                  vertical: 16,
+                  vertical: 12,
                 ),
                 child: Center(
                   child: Text(
