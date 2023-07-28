@@ -81,51 +81,54 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Expanded(
-              child: ListView(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 30),
-                children: [
-                  Text(
-                    'Pengeluaran Hari Ini',
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .titleLarge!
-                        .copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  DView.spaceHeight(),
-                  cardToday(context),
-                  DView.spaceHeight(30),
-                  Center(
-                    child: Container(
-                      height: 5,
-                      width: 80,
-                      decoration: BoxDecoration(
-                          color: AppColor.primary.withOpacity(0.5),
-                          borderRadius: BorderRadius.circular(30)),
+              child: RefreshIndicator(
+                onRefresh: () async => cHome.getAnalysis(cUser.data.idUser!),
+                child: ListView(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 30),
+                  children: [
+                    Text(
+                      'Pengeluaran Hari Ini',
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .titleLarge!
+                          .copyWith(fontWeight: FontWeight.bold),
                     ),
-                  ),
-                  DView.spaceHeight(30),
-                  Text(
-                    'Pengeluaran Minggu Ini',
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .titleLarge!
-                        .copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  DView.spaceHeight(),
-                  barWeekly(),
-                  DView.spaceHeight(30),
-                  Text(
-                    'Pengeluaran Bulan Ini',
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .titleLarge!
-                        .copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  chartMont(context)
-                ],
+                    DView.spaceHeight(),
+                    cardToday(context),
+                    DView.spaceHeight(30),
+                    Center(
+                      child: Container(
+                        height: 5,
+                        width: 80,
+                        decoration: BoxDecoration(
+                            color: AppColor.primary.withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(30)),
+                      ),
+                    ),
+                    DView.spaceHeight(30),
+                    Text(
+                      'Pengeluaran Minggu Ini',
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .titleLarge!
+                          .copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    DView.spaceHeight(),
+                    barWeekly(),
+                    DView.spaceHeight(30),
+                    Text(
+                      'Pengeluaran Bulan Ini',
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .titleLarge!
+                          .copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    chartMont(context)
+                  ],
+                ),
               )),
         ],
       ),
@@ -380,7 +383,7 @@ class _HomePageState extends State<HomePage> {
           ),
           ListTile(
             onTap: () {
-              Get.to(()=>const AddHistoryPage())?.then((value) {
+              Get.to(()=> AddHistoryPage())?.then((value) {
                 if(value??false) {
                   cHome.getAnalysis(cUser.data.idUser!);
                 }

@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
-import 'package:money_record/data/source/source_history.dart';
+
+import '../../data/source/source_history.dart';
 
 class CHome extends GetxController {
   final _today = 0.0.obs;
@@ -21,12 +22,9 @@ class CHome extends GetxController {
       days[today.subtract(const Duration(days: 3)).weekday - 1],
       days[today.subtract(const Duration(days: 2)).weekday - 1],
       days[today.subtract(const Duration(days: 1)).weekday - 1],
-      days[today.weekday - 1]
+      days[today.weekday - 1],
     ];
   }
-
-  // final _month = {'income': 0.0, 'outcome': 0.0}.obs;
-  // Map get month => _month.value;
 
   final _monthIncome = 0.0.obs;
   double get monthIncome => _monthIncome.value;
@@ -37,8 +35,6 @@ class CHome extends GetxController {
   final _percentIncome = '0'.obs;
   String get percentIncome => _percentIncome.value;
 
-  // final _monthPercent = ''.obs;
-  // String get monthPercent => _monthPercent.value;
   final _monthPercent = ''.obs;
   String get monthPercent => _monthPercent.value;
 
@@ -48,38 +44,35 @@ class CHome extends GetxController {
   getAnalysis(String idUser) async {
     Map data = await SourceHistory.analysis(idUser);
 
-    ///today outcome
+    // today outcome
     _today.value = data['today'].toDouble();
     double yesterday = data['yesterday'].toDouble();
     double different = (today - yesterday).abs();
     bool isSame = today.isEqual(yesterday);
     bool isPlus = today.isGreaterThan(yesterday);
-    double byYesterday = yesterday == 0 ? 1 : yesterday;
-    double percent = (different - byYesterday) * 100;
+    double dividerToday = (today + yesterday) == 0 ? 1 : (today + yesterday);
+    double percent = (different / dividerToday) * 100;
     _todayPercent.value = isSame
         ? '100% sama dengan kemarin'
         : isPlus
-            ? '+ ${percent.toStringAsFixed(1)}% dibanding kemarin'
-            : '- ${percent.toStringAsFixed(1)}% dibanding kemarin';
+        ? '+${percent.toStringAsFixed(1)}% dibanding kemarin'
+        : '-${percent.toStringAsFixed(1)}% dibanding kemarin';
 
-    ///week
     _week.value = List.castFrom(data['week'].map((e) => e.toDouble()).toList());
 
-    ///month
     _monthIncome.value = data['month']['income'].toDouble();
     _monthOutcome.value = data['month']['outcome'].toDouble();
     _differentMonth.value = (monthIncome - monthOutcome).abs();
     bool isSameMonth = monthIncome.isEqual(monthOutcome);
     bool isPlusMonth = monthIncome.isGreaterThan(monthOutcome);
-    // double byOutcome = monthOutcome == 0 ? 1 : monthOutcome;
     double dividerMonth =
-        (monthIncome + monthOutcome) == 0 ? 1 : (monthIncome + monthOutcome);
+    (monthIncome + monthOutcome) == 0 ? 1 : (monthIncome + monthOutcome);
     double percentMonth = (differentMonth / dividerMonth) * 100;
     _percentIncome.value = percentMonth.toStringAsFixed(1);
     _monthPercent.value = isSameMonth
-        ? 'Pemasukan\n100% sama \ndengan pengeluaran'
+        ? 'Pemasukan\n100% sama\ndengan Pengeluaran'
         : isPlusMonth
-            ? 'Pemasukan\nlebih besar ${percentMonth.toStringAsFixed(1)}%\ndari pengeluaran'
-            : 'Pemasukan\nlebih kecil ${percentMonth.toStringAsFixed(1)}%\ndari pengeluaran';
+        ? 'Pemasukan\nlebih besar $percentIncome%\ndari Pengeluaran'
+        : 'Pemasukan\nlebih kecil $percentIncome%\ndari Pengeluaran';
   }
 }

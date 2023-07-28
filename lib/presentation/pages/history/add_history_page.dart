@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:d_input/d_input.dart';
 import 'package:d_view/d_view.dart';
 import 'package:flutter/material.dart';
@@ -7,15 +9,34 @@ import 'package:money_record/config/app_format.dart';
 import 'package:money_record/presentation/controller/history/c_add_history.dart';
 
 import '../../../config/app_color.dart';
+import '../../../data/source/source_history.dart';
+import '../../controller/c_user.dart';
 
 class AddHistoryPage extends StatelessWidget {
-  const AddHistoryPage({super.key});
+  AddHistoryPage({super.key});
+
+  final cUser = Get.put(CUser());
+  final cAddHistory = Get.put(CAddHistory());
+  final objectController = TextEditingController();
+  final priceController = TextEditingController();
+
+  addHistory() async {
+    bool success = await SourceHistory.add(
+        cUser.data.idUser!,
+        cAddHistory.date,
+        cAddHistory.type,
+        jsonEncode(cAddHistory.items),
+        cAddHistory.total.toString());
+
+    if (success) {
+      Future.delayed(const Duration(milliseconds: 3000), () {
+        Get.back(result: true);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final cAddHistory = Get.put(CAddHistory());
-    final objectController = TextEditingController();
-    final priceController = TextEditingController();
     return Scaffold(
       appBar: DView.appBarLeft("Tambah Baru"),
       body: ListView(
@@ -37,7 +58,9 @@ class AddHistoryPage extends StatelessWidget {
                         context: context,
                         initialDate: DateTime.now(),
                         firstDate: DateTime(2022, 01, 01),
-                        lastDate: DateTime(DateTime.now().year + 1));
+                        lastDate: DateTime(DateTime
+                            .now()
+                            .year + 1));
                     if (result != null) {
                       cAddHistory
                           .setDate(DateFormat('yyyy-MM-dd').format(result));
@@ -114,19 +137,19 @@ class AddHistoryPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: Colors.grey)),
             child: GetBuilder<CAddHistory>(
-              builder: (_) {
-                return Wrap(
-                  // runSpacing: 8,
-                  spacing: 8,
-                  children: List.generate(_.items.length, (index) {
-                    return Chip(
-                      label: Text(_.items[index]['object']),
-                      deleteIcon: const Icon(Icons.clear),
-                      onDeleted: () => _.deleteItem(index),
-                    );
-                  })
-                );
-              }
+                builder: (_) {
+                  return Wrap(
+                    // runSpacing: 8,
+                      spacing: 8,
+                      children: List.generate(_.items.length, (index) {
+                        return Chip(
+                          label: Text(_.items[index]['object']),
+                          deleteIcon: const Icon(Icons.clear),
+                          onDeleted: () => _.deleteItem(index),
+                        );
+                      })
+                  );
+                }
             ),
           ),
           DView.spaceHeight(),
@@ -138,12 +161,16 @@ class AddHistoryPage extends StatelessWidget {
               ),
               DView.spaceWidth(),
               Obx(() {
-                  return Text(
-                    AppFormat.currency(cAddHistory.total.toString()),
-                    style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                        fontWeight: FontWeight.bold, color: AppColor.primary),
-                  );
-                }
+                return Text(
+                  AppFormat.currency(cAddHistory.total.toString()),
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .headlineSmall!
+                      .copyWith(
+                      fontWeight: FontWeight.bold, color: AppColor.primary),
+                );
+              }
               )
             ],
           ),
@@ -152,7 +179,7 @@ class AddHistoryPage extends StatelessWidget {
             color: AppColor.primary,
             borderRadius: BorderRadius.circular(8),
             child: InkWell(
-              onTap: () {},
+              onTap: () => addHistory(),
               child: Padding(
                 padding: const EdgeInsets.symmetric(
                   vertical: 12,
@@ -160,7 +187,8 @@ class AddHistoryPage extends StatelessWidget {
                 child: Center(
                   child: Text(
                     'SUBMIT',
-                    style: Theme.of(context)
+                    style: Theme
+                        .of(context)
                         .textTheme
                         .titleLarge!
                         .copyWith(color: AppColor.bg),
