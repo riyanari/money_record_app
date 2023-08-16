@@ -9,14 +9,14 @@ History historyFromJson(String str) => History.fromJson(json.decode(str));
 String historyToJson(History data) => json.encode(data.toJson());
 
 class History {
-  String idHistory;
-  String idUser;
-  String type;
-  String date;
-  String total;
-  String details;
-  String createdAt;
-  String updatedAt;
+  final String? idHistory;
+  final String? idUser;
+  final String? type;
+  final String? date;
+  final String? total;
+  final String? details;
+  final String? createdAt;
+  final String? updatedAt;
 
   History({
     required this.idHistory,

@@ -44,12 +44,12 @@ class AddHistoryPage extends StatelessWidget {
         children: [
           const Text(
             "Tanggal",
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: TextStyle(fontWeight: FontWeight.bold, color: AppColor.textPrimary),
           ),
           Row(
             children: [
               Obx(() {
-                return Text(cAddHistory.date);
+                return Text(cAddHistory.date, style: const TextStyle(color: AppColor.textPrimary),);
               }),
               DView.spaceWidth(),
               ElevatedButton.icon(
@@ -73,12 +73,12 @@ class AddHistoryPage extends StatelessWidget {
           DView.spaceHeight(),
           const Text(
             "Tipe",
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: TextStyle(fontWeight: FontWeight.bold, color: AppColor.textPrimary),
           ),
           DView.spaceHeight(8),
           Obx(() {
             return DropdownButtonFormField(
-              value: cAddHistory.type,
+              value: cAddHistory.type, style: const TextStyle(color: AppColor.textPrimary, fontSize: 16),
               items: ['Pemasukan', 'Pengeluaran'].map((e) {
                 return DropdownMenuItem(
                   value: e,
@@ -97,6 +97,7 @@ class AddHistoryPage extends StatelessWidget {
             controller: objectController,
             hint: 'Gaji',
             title: "Sumber/objek pengeluaran",
+            style: TextStyle(color: AppColor.textPrimary),
           ),
           DView.spaceHeight(),
           DInput(
@@ -104,6 +105,7 @@ class AddHistoryPage extends StatelessWidget {
             hint: '5000000',
             title: "Jumlah Rp. ",
             inputType: TextInputType.number,
+            style: TextStyle(color: AppColor.textPrimary),
           ),
           DView.spaceHeight(),
           ElevatedButton(
@@ -128,7 +130,7 @@ class AddHistoryPage extends StatelessWidget {
           DView.spaceHeight(),
           const Text(
             "Items",
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: TextStyle(fontWeight: FontWeight.bold, color: AppColor.textPrimary),
           ),
           DView.spaceHeight(8),
           Container(
@@ -157,7 +159,7 @@ class AddHistoryPage extends StatelessWidget {
             children: [
               const Text(
                 "Total: ",
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(fontWeight: FontWeight.bold, color: AppColor.textPrimary),
               ),
               DView.spaceWidth(),
               Obx(() {

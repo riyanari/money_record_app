@@ -10,6 +10,7 @@ import 'package:money_record/presentation/controller/c_home.dart';
 import 'package:money_record/presentation/controller/c_user.dart';
 import 'package:money_record/presentation/pages/auth/login_page.dart';
 import 'package:money_record/presentation/pages/history/add_history_page.dart';
+import 'package:money_record/presentation/pages/history/income_outcome_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -48,12 +49,14 @@ class _HomePageState extends State<HomePage> {
                       const Text(
                         'Hi,',
                         style: TextStyle(
+                          color: AppColor.textPrimary,
                             fontWeight: FontWeight.bold, fontSize: 20),
                       ),
                       Obx(() {
                         return Text(
                           cUser.data.name ?? 'Someone',
                           style: const TextStyle(
+                            color: AppColor.textPrimary,
                               fontWeight: FontWeight.bold, fontSize: 20),
                         );
                       }),
@@ -92,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                           .of(context)
                           .textTheme
                           .titleLarge!
-                          .copyWith(fontWeight: FontWeight.bold),
+                          .copyWith(fontWeight: FontWeight.bold, color: AppColor.textPrimary),
                     ),
                     DView.spaceHeight(),
                     cardToday(context),
@@ -102,7 +105,7 @@ class _HomePageState extends State<HomePage> {
                         height: 5,
                         width: 80,
                         decoration: BoxDecoration(
-                            color: AppColor.primary.withOpacity(0.5),
+                            color: AppColor.primary.withOpacity(0.3),
                             borderRadius: BorderRadius.circular(30)),
                       ),
                     ),
@@ -113,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                           .of(context)
                           .textTheme
                           .titleLarge!
-                          .copyWith(fontWeight: FontWeight.bold),
+                          .copyWith(fontWeight: FontWeight.bold, color: AppColor.textPrimary),
                     ),
                     DView.spaceHeight(),
                     barWeekly(),
@@ -124,7 +127,7 @@ class _HomePageState extends State<HomePage> {
                           .of(context)
                           .textTheme
                           .titleLarge!
-                          .copyWith(fontWeight: FontWeight.bold),
+                          .copyWith(fontWeight: FontWeight.bold, color: AppColor.textPrimary),
                     ),
                     chartMont(context)
                   ],
@@ -246,7 +249,7 @@ class _HomePageState extends State<HomePage> {
                       case 'income':
                         return AppColor.primary;
                       case 'outcome':
-                        return AppColor.chart;
+                        return AppColor.secondary;
                       default:
                         return Colors.grey.withOpacity(0.2);
                     }
@@ -341,14 +344,14 @@ class _HomePageState extends State<HomePage> {
                             return Text(
                               cUser.data.name ?? 'Someone',
                               style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 20),
+                                  fontWeight: FontWeight.bold, fontSize: 20, color: AppColor.textPrimary),
                             );
                           }),
                           Obx(() {
                             return Text(
                               cUser.data.email ?? 'someone@gmail.com',
                               style: const TextStyle(
-                                  fontWeight: FontWeight.w300, fontSize: 16),
+                                  fontWeight: FontWeight.w300, fontSize: 16, color: AppColor.textPrimary),
                             );
                           }),
                         ],
@@ -389,40 +392,44 @@ class _HomePageState extends State<HomePage> {
                 }
               });
             },
-            leading: const Icon(Icons.add),
+            leading: Icon(Icons.add, color: AppColor.textPrimary.withOpacity(0.5),),
             horizontalTitleGap: 0,
-            title: const Text('Tambah Baru'),
-            trailing: const Icon(Icons.navigate_next),
+            title: const Text('Tambah Baru', style: TextStyle(color: AppColor.textPrimary),),
+            trailing:  Icon(Icons.navigate_next, color: AppColor.textPrimary.withOpacity(0.5)),
+          ),
+          const Divider(
+            height: 1,
+          ),
+          ListTile(
+            onTap: () {
+              Get.to(() => const IncomeOutcomePage(type: 'Pemasukan'));
+            },
+            leading:  Icon(Icons.south_west, color: AppColor.textPrimary.withOpacity(0.5)),
+            horizontalTitleGap: 0,
+            title: const Text('Pemasukan', style: TextStyle(color: AppColor.textPrimary)),
+            trailing:  Icon(Icons.navigate_next, color: AppColor.textPrimary.withOpacity(0.5)),
+          ),
+          const Divider(
+            height: 1,
+          ),
+          ListTile(
+            onTap: () {
+              Get.to(() => const IncomeOutcomePage(type: 'Pengeluaran'));
+            },
+            leading: Icon(Icons.north_east, color: AppColor.textPrimary.withOpacity(0.5)),
+            horizontalTitleGap: 0,
+            title: const Text('Pengeluaran', style: TextStyle(color: AppColor.textPrimary)),
+            trailing:  Icon(Icons.navigate_next, color: AppColor.textPrimary.withOpacity(0.5)),
           ),
           const Divider(
             height: 1,
           ),
           ListTile(
             onTap: () {},
-            leading: const Icon(Icons.south_west),
+            leading: Icon(Icons.history, color: AppColor.textPrimary.withOpacity(0.5)),
             horizontalTitleGap: 0,
-            title: const Text('Pemasukan'),
-            trailing: const Icon(Icons.navigate_next),
-          ),
-          const Divider(
-            height: 1,
-          ),
-          ListTile(
-            onTap: () {},
-            leading: const Icon(Icons.north_east),
-            horizontalTitleGap: 0,
-            title: const Text('Pengeluaran'),
-            trailing: const Icon(Icons.navigate_next),
-          ),
-          const Divider(
-            height: 1,
-          ),
-          ListTile(
-            onTap: () {},
-            leading: const Icon(Icons.history),
-            horizontalTitleGap: 0,
-            title: const Text('Riwayat'),
-            trailing: const Icon(Icons.navigate_next),
+            title: const Text('Riwayat', style: TextStyle(color: AppColor.textPrimary)),
+            trailing:  Icon(Icons.navigate_next, color: AppColor.textPrimary.withOpacity(0.5)),
           ),
           const Divider(
             height: 1,
