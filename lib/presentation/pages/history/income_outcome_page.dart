@@ -6,6 +6,7 @@ import 'package:money_record/config/app_color.dart';
 import 'package:money_record/config/app_format.dart';
 import 'package:money_record/presentation/controller/c_user.dart';
 import 'package:money_record/presentation/controller/history/c_income_outcome.dart';
+import 'package:money_record/presentation/pages/history/update_history_page.dart';
 
 import '../../../data/model/history.dart';
 
@@ -25,6 +26,16 @@ class _IncomeOutcomePageState extends State<IncomeOutcomePage> {
 
   refresh() {
     cInOut.getList(cUser.data.idUser, widget.type);
+  }
+
+  menuOption(String value, History history) {
+    if (value == 'update') {
+      Get.to(() => UpdateHistoryPage(date: history.date!))?.then((value) {
+        if (value ?? false) {
+          refresh();
+        }
+      });
+    } else if (value == 'delete') {}
   }
 
   @override
@@ -110,10 +121,7 @@ class _IncomeOutcomePageState extends State<IncomeOutcomePage> {
                   History history = _.list[index];
                   return Card(
                     elevation: 4,
-                    margin: EdgeInsets.fromLTRB(
-                        16,
-                        index == 0 ? 16 : 8,
-                        16,
+                    margin: EdgeInsets.fromLTRB(16, index == 0 ? 16 : 8, 16,
                         index == _.list.length - 1 ? 16 : 8),
                     child: Row(
                       children: [
@@ -134,10 +142,18 @@ class _IncomeOutcomePageState extends State<IncomeOutcomePage> {
                               fontSize: 16),
                           textAlign: TextAlign.end,
                         )),
-                        PopupMenuButton(
-                          itemBuilder: (context) => [],
-                          onSelected: (value) {},
-                        )
+                        PopupMenuButton<String>(
+                            itemBuilder: (context) => [
+                                  const PopupMenuItem(
+                                    value: 'update',
+                                    child: Text('Update'),
+                                  ),
+                                  const PopupMenuItem(
+                                    value: 'delete',
+                                    child: Text('Delete'),
+                                  )
+                                ],
+                            onSelected: (value) => menuOption(value, history))
                       ],
                     ),
                   );
